@@ -1,20 +1,20 @@
 {
   "id": "seanime-torrent-tweaks",
-  "name": "Torrent Tweaks",
-  "version": "1.0.1",
-  "manifestURI": "https://raw.githubusercontent.com/SaSo-byte/seanime-torrent-tweaks/main/manifest.json",
+  "name": "Seanime Multi-Subs Filter",
+  "version": "1.0.2",
+  "manifestURI": "https://raw.githubusercontent.com/SaSo-byte/seanime-multiSubs-filter/main/manifest.json",
   "language": "javascript",
   "type": "plugin",
-  "description": "Torrent search: show only Multi Subs releases, and fall back to all results if there are none.",
+  "description": "Filter torrent searches to Multi Subs releases, with a fallback to show all results when none match.",
   "author": "SaSo-byte",
   "lang": "en",
-  "payloadURI": "https://raw.githubusercontent.com/SaSo-byte/seanime-torrent-tweaks/main/main.js",
+  "payloadURI": "https://raw.githubusercontent.com/SaSo-byte/seanime-multiSubs-filter/main/main.js",
   "plugin": {
     "version": "1",
     "permissions": {
       "scopes": []
     }
   },
-  "website": "https://github.com/SaSo-byte/seanime-torrent-tweaks",
-  "readme": "https://raw.githubusercontent.com/SaSo-byte/seanime-torrent-tweaks/main/README.md"
+  "website": "https://github.com/SaSo-byte/seanime-multiSubs-filter",
+  "readme": "https://raw.githubusercontent.com/SaSo-byte/seanime-multiSubs-filter/main/README.md"
 }
