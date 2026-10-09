@@ -1,0 +1,107 @@
+/* =====================================================================
+   Seanime Torrent Tweaks - Custom CSS
+   ===================================================================== */
+
+/* ---------- 1. COLORS: change the # codes to recolor things ---------- */
+:root {
+    color-scheme: dark;
+    --enc-avc:  #22c55e; /* AVC / x264  = green  (also pinned to the top) */
+    --enc-hevc: #38bdf8; /* HEVC / x265 = blue   */
+    --enc-av1:  #a855f7; /* AV1 / SVT-AV1 = purple */
+    --gold:     #facc15; /* Remux + Seanime's "Highest quality" = gold */
+    --accent:   #6d5dfc; /* focus / text-selection color */
+}
+
+/* ---------- 2. DRAWING: a colored stripe, tint and outline on each torrent ----------
+   Torrents with no matching encode get no color (the colors below are "empty"). */
+[data-torrent-preview-item]::before {          /* thin stripe on the left edge */
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    background: var(--enc, transparent);
+    z-index: 6;
+    pointer-events: none;
+}
+[data-torrent-preview-item]::after {           /* soft background tint + outline */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--enc, transparent) 10%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc, transparent) 60%, transparent);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* ---------- 3. ENCODE RULES (later rules win if a name matches more than one) ---------- */
+
+/* AVC / x264 / H.264 -> green, and PINNED TO THE TOP of the list.
+   The list keeps Seanime's own order (highest seeders first), so you get:
+   AVC with most seeds -> other AVC -> everything else by seeds. */
+[data-torrent-preview-item]:is(
+    [data-torrent-name*="x264" i],
+    [data-torrent-name*="h264" i],
+    [data-torrent-name*="h.264" i],
+    [data-torrent-name*="avc" i]
+) {
+    --enc: var(--enc-avc);
+    order: -1;
+}
+
+/* HEVC / x265 / H.265 -> blue */
+[data-torrent-preview-item]:is(
+    [data-torrent-name*="x265" i],
+    [data-torrent-name*="h265" i],
+    [data-torrent-name*="h.265" i],
+    [data-torrent-name*="hevc" i]
+) {
+    --enc: var(--enc-hevc);
+    order: 0;
+}
+
+/* AV1 (includes SVT-AV1) -> purple */
+[data-torrent-preview-item][data-torrent-name*="av1" i] {
+    --enc: var(--enc-av1);
+    order: 0;
+}
+
+/* 10-bit releases (any encode) get a thicker stripe */
+[data-torrent-preview-item]:is(
+    [data-torrent-name*="10bit" i],
+    [data-torrent-name*="10-bit" i],
+    [data-torrent-name*="10 bit" i],
+    [data-torrent-name*="hi10" i]
+)::before {
+    width: 7px;
+}
+
+/* BEST QUALITY: keep this LAST so gold wins over everything above */
+[data-torrent-preview-item]:is(
+    [data-torrent-name*="remux" i],
+    [data-is-best-release="true"]
+) {
+    --enc: var(--gold);
+}
+
+/* ---------- 4. EXTRAS (from your example) ---------- */
+
+/* scrollbar: thumb, track */
+* { scrollbar-width: thin; scrollbar-color: #333 #000; }
+*::-webkit-scrollbar { width: 8px; height: 8px; background: #000; }
+*::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 8px; }
+*::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
+*::-webkit-scrollbar-corner { background: #000; }
+
+::selection { background: var(--accent); color: #fff; }
+:focus-visible { outline: 2px solid var(--accent) !important; outline-offset: 2px; }
+
+/* hover lift on anime cards: lower numbers = subtler */
+a[href^="/entry"] { transition: transform .25s, filter .25s; }
+a[href^="/entry"]:hover {
+    transform: translateY(-4px) scale(1.03);
+    filter: brightness(1.08);
+    z-index: 10;
+}
