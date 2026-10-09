@@ -2,21 +2,24 @@
 ///
 /// Keep releases identified as Multi Subs. If none match, leave the search results unchanged.
 
-const MULTI_SUBS_NAME = /multi(ple)?[\s._-]*sub/i
-
-function isMultiSubs(torrent, metadata) {
-    const subtitles = metadata && metadata.subtitles
-    const subtitleList = Array.isArray(subtitles) ? subtitles : [subtitles]
-
-    if (subtitleList.some((subtitle) => String(subtitle || "").toLowerCase().includes("multi"))) {
-        return true
-    }
-
-    return MULTI_SUBS_NAME.test(String((torrent && torrent.name) || ""))
-}
-
 function init() {
     $app.onTorrentSearch((e) => {
+        // Seanime may run this callback as a standalone function, so keep its helpers local.
+        const MULTI_SUBS_NAME = /multi(ple)?[\s._-]*sub/i
+
+        const isMultiSubs = (torrent, metadata) => {
+            const subtitles = metadata && metadata.subtitles
+            const subtitleList = Array.isArray(subtitles) ? subtitles : [subtitles]
+
+            for (let i = 0; i < subtitleList.length; i++) {
+                if (String(subtitleList[i] || "").toLowerCase().indexOf("multi") !== -1) {
+                    return true
+                }
+            }
+
+            return MULTI_SUBS_NAME.test(String((torrent && torrent.name) || ""))
+        }
+
         try {
             const data = e.searchData
             if (data && Array.isArray(data.torrents) && data.torrents.length > 0) {
