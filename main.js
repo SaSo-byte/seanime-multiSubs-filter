@@ -2,16 +2,10 @@
 ///
 /// After every anime torrent search, keep only releases that have multiple subtitles ("Multi Subs").
 /// If NONE of the results have multiple subtitles, the full list is shown instead, so the page is never empty.
-///
-/// Note: AVC/x264 pinning and color-coding is done by style.css, not here.
-/// (Seanime re-sorts results on its own after plugins run, so a JS sort would be undone.)
 
 function init() {
     $app.onTorrentSearch((e) => {
-        // IMPORTANT: Seanime copies this function as plain text and runs it in a separate engine,
-        // so it cannot see anything defined outside it. Keep every helper INSIDE this function.
-
-        // Same rule as Seanime's built-in "Multi Subs" filter: the parsed subtitle tags contain "multi".
+     
         // The name check also catches "Multi-Subs", "MultiSub" and "Multiple Subtitle" that the parser can miss.
         const MULTI_SUBS_NAME = /multi(ple)?[\s._-]*sub/i
 
